@@ -85,10 +85,10 @@ const PIE_COLORS = [
   "#b9ceab",
 ];
 
-const formatLabel = (label: string): string => {
+const formatLabel = (label: string) => {
   const words = label.split(" ");
   let currentLine = "";
-  const lines: string[] = []; // Change this to a string array
+  const lines = [];
 
   words.forEach((word) => {
     if (currentLine.length + word.length + (currentLine ? 1 : 0) <= 12) {
@@ -102,16 +102,28 @@ const formatLabel = (label: string): string => {
   if (currentLine) {
     lines.push(currentLine);
   }
-  
-  // Return joined lines with a newline character
-  return lines.join("\n");
+  return lines.map((line, index) => (
+    <tspan
+      key={index}
+      x="0"
+      dy={index === 0 ? "-1.1em" : "1em"}
+      className="text-sm md:text-lg"
+      style={{
+        fill: "#000",
+        fontFamily: "Figtree, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'",
+        fontWeight: 700,
+      }}
+    >
+      {line}
+    </tspan>
+  ));
 };
 
-const PieChart = () => {
+const PieChart: React.FC<{ data?: any; }> = ({ data }) => {
   const [faqs, setFaqs] = useState<FAQItem[]>([]);
   const [label, setLabel] = useState("");
   const [content, setContent] = useState("");
-  const [selectedID, setSelectedID] = useState<string>('');
+  const [selectedID, setSelectedID] = useState<any>(0);
   const [visitQuestion, setVisitQuestion] = useState<number[][]>([[], [], [], [], [], [], []])
 
   const closeModal = () => {
@@ -127,9 +139,9 @@ const PieChart = () => {
   };
 
   useEffect(() => {
-    console.log("Selected Slice ID:", selectedID);
+  console.log("Selected Slice ID:", selectedID);
   }, [selectedID]);
-
+  
   // YOU can use ID value of every slices here------------------------------------//
 
   return (
@@ -141,8 +153,7 @@ const PieChart = () => {
         activeOuterRadiusOffset={10}
         arcLabelsRadiusOffset={0.6}
         borderWidth={0}
-        // Update arcLabel to call the modified formatLabel
-        arcLabel={({ label }) => formatLabel(label as string)}
+        arcLabel={({ label }) => formatLabel(label as string) as any}
         borderColor="white"
         colors={PIE_COLORS}
         enableArcLinkLabels={false}
@@ -152,7 +163,7 @@ const PieChart = () => {
           if (pieData) {
             handleClick(pieData.faqs, pieData.label, pieData.content);
           }
-          setSelectedID(String(id));
+          setSelectedID(id); 
         }}
       />
       <FaqModal title={label} isOpen={true} content={content} onClose={closeModal}>
