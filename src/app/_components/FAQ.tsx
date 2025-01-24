@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { useState } from "react";
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/16/solid'
 interface FAQItem {
   question: string;
@@ -7,29 +7,13 @@ interface FAQItem {
 
 interface FAQProps {
     items: FAQItem[];
-    visitQuestion?: number[][];
-    setVisitQuestion?: Dispatch<SetStateAction<number[][]>>;
-    selectedID?: string;
   }
 
-  const FAQ: React.FC<FAQProps> = ({ items, visitQuestion, selectedID, setVisitQuestion}) => {
+  const FAQ: React.FC<FAQProps> = ({ items}) => {
     const [openIndex, setOpenIndex] = useState<number | null>(null);
   
     const toggleOpen = (index: number) => {
         setOpenIndex(openIndex === index ? null : index);
-        if(selectedID === "-ik-ga-beginnen") selectedID = '1';
-        if(selectedID === "-het-is-moeilijker-dan-ik-dacht") selectedID = '2';
-        if(selectedID === "-ik-weet-niet-hoe-ik-verder-moet") selectedID = '3';
-        if(selectedID === "-ik-ga-door-om-het-doel-te-bereiken") selectedID = '4';
-        if(selectedID === "-ik-denk-dat-het-gaat-lukken") selectedID = '5';
-        if(selectedID === "-het-is-gelukt") selectedID = '6';
-  
-        if(openIndex === index) return;
-        if(!visitQuestion || !setVisitQuestion || !selectedID) return;
-        if(visitQuestion[Number(selectedID)] && visitQuestion[Number(selectedID)][index]) visitQuestion[Number(selectedID)][index] += 1;
-        else visitQuestion[Number(selectedID)][index] = 1;
-        setVisitQuestion(visitQuestion);
-        console.log(visitQuestion);
   
         // ------------You can use visitQuestion here------------
       

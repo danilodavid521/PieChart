@@ -1,7 +1,7 @@
 "use client";
 import { ResponsivePie } from "@nivo/pie";
 import FaqModal from "./FaqModal";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import FAQ from "./FAQ";
 
 interface FAQItem {
@@ -85,7 +85,7 @@ const PIE_COLORS = [
   "#b9ceab",
 ];
 
-const formatLabel = (label: string) => {
+const formatLabel  = (label: string) => {
   const words = label.split(" ");
   let currentLine = "";
   const lines = [];
@@ -119,12 +119,10 @@ const formatLabel = (label: string) => {
   ));
 };
 
-const PieChart: React.FC<{ data?: any; }> = ({ data }) => {
+const PieChart: React.FC<{ data?: string }> = () => {
   const [faqs, setFaqs] = useState<FAQItem[]>([]);
   const [label, setLabel] = useState("");
   const [content, setContent] = useState("");
-  const [selectedID, setSelectedID] = useState<any>(0);
-  const [visitQuestion, setVisitQuestion] = useState<number[][]>([[], [], [], [], [], [], []])
 
   const closeModal = () => {
     setFaqs([]);
@@ -138,9 +136,6 @@ const PieChart: React.FC<{ data?: any; }> = ({ data }) => {
     setContent(content || "");
   };
 
-  useEffect(() => {
-  console.log("Selected Slice ID:", selectedID);
-  }, [selectedID]);
   
   // YOU can use ID value of every slices here------------------------------------//
 
@@ -163,11 +158,10 @@ const PieChart: React.FC<{ data?: any; }> = ({ data }) => {
           if (pieData) {
             handleClick(pieData.faqs, pieData.label, pieData.content);
           }
-          setSelectedID(id); 
         }}
       />
       <FaqModal title={label} isOpen={true} content={content} onClose={closeModal}>
-        <FAQ items={faqs} visitQuestion={visitQuestion} setVisitQuestion={setVisitQuestion} selectedID={selectedID} />
+        <FAQ items={faqs} />
       </FaqModal>
     </>
   );

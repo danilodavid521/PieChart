@@ -6,7 +6,7 @@ export default function Home() {
     <div className="flex h-screen flex-col items-center justify-start">
       <Header />
       <div className="min-w-2xl flex h-full min-h-[32rem] w-full max-w-2xl items-center justify-center">
-        <PieChart  /> 
+        <PieChart />  {/* No data prop needed anymore */}
       </div>
     </div>
   );
