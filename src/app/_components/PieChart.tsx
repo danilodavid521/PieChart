@@ -142,6 +142,7 @@ const PieChart: React.FC = () => {
   useEffect(() => {
     console.log("Selected Slice ID:", selectedID);
     }, [selectedID]);
+
   // YOU can use ID value of every slices here------------------------------------//
 
   return (
