@@ -1,7 +1,8 @@
+
 "use client";
 import { ResponsivePie } from "@nivo/pie";
 import FaqModal from "./FaqModal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FAQ from "./FAQ";
 
 interface FAQItem {
@@ -85,10 +86,10 @@ const PIE_COLORS = [
   "#b9ceab",
 ];
 
-const formatLabel  = (label: string) => {
+const formatLabel = (label: string) => {
   const words = label.split(" ");
   let currentLine = "";
-  const lines = [];
+  const lines: string[] = [];
 
   words.forEach((word) => {
     if (currentLine.length + word.length + (currentLine ? 1 : 0) <= 12) {
@@ -119,10 +120,12 @@ const formatLabel  = (label: string) => {
   ));
 };
 
-const PieChart: React.FC<{ data?: string }> = () => {
+const PieChart: React.FC = () => {
   const [faqs, setFaqs] = useState<FAQItem[]>([]);
   const [label, setLabel] = useState("");
   const [content, setContent] = useState("");
+  const [selectedID,setSelectedID] = useState("");
+  const [visitQuestion, setVisitQuestion] = useState<number[][]>([[],[],[],[],[],[],[]]);
 
   const closeModal = () => {
     setFaqs([]);
@@ -136,7 +139,9 @@ const PieChart: React.FC<{ data?: string }> = () => {
     setContent(content || "");
   };
 
-  
+  useEffect(() => {
+    console.log("Selected Slice ID:", selectedID);
+    }, [selectedID]);
   // YOU can use ID value of every slices here------------------------------------//
 
   return (
@@ -148,6 +153,7 @@ const PieChart: React.FC<{ data?: string }> = () => {
         activeOuterRadiusOffset={10}
         arcLabelsRadiusOffset={0.6}
         borderWidth={0}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         arcLabel={({ label }) => formatLabel(label as string) as any}
         borderColor="white"
         colors={PIE_COLORS}
@@ -158,10 +164,11 @@ const PieChart: React.FC<{ data?: string }> = () => {
           if (pieData) {
             handleClick(pieData.faqs, pieData.label, pieData.content);
           }
+          setSelectedID(String(id));
         }}
       />
       <FaqModal title={label} isOpen={true} content={content} onClose={closeModal}>
-        <FAQ items={faqs} />
+        <FAQ items={faqs} visitQuestion={visitQuestion} setVisitQuestion={setVisitQuestion} selectedID={selectedID}/>
       </FaqModal>
     </>
   );
